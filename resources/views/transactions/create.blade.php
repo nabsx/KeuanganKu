@@ -27,14 +27,14 @@
 
             <!-- Amount Field -->
             <div>
-                <label for="amount" class="block text-sm font-medium text-text-primary mb-2">
+                <label for="amountDisplay" class="block text-sm font-medium text-text-primary mb-2">
                     Jumlah Uang Keluar <span class="text-error">*</span>
                 </label>
                 <div class="flex items-center gap-2">
                     <span class="text-text-secondary text-sm font-medium">Rp</span>
-                    <input type="number" id="amount" name="amount" step="0.01" min="0.01" value="{{ old('amount') }}" required 
-                        placeholder="0"
+                    <input type="text" id="amountDisplay" placeholder="Contoh: 100.000" required 
                         class="flex-1 px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition @error('amount') border-error @enderror">
+                    <input type="hidden" id="amount" name="amount" value="{{ old('amount') }}">
                 </div>
                 @error('amount')
                     <p class="text-error text-xs mt-1">{{ $message }}</p>
@@ -83,4 +83,41 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    const amountDisplay = document.getElementById('amountDisplay');
+    const amountHidden = document.getElementById('amount');
+    
+    // Format number with dots as thousands separator
+    function formatNumber(num) {
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+    
+    // Parse formatted number to actual number
+    function parseFormattedNumber(str) {
+        return str.replace(/\./g, '');
+    }
+    
+    // Load previous value if exists
+    if (amountHidden.value) {
+        amountDisplay.value = formatNumber(amountHidden.value);
+    }
+    
+    // Handle display input
+    amountDisplay.addEventListener('input', function() {
+        let value = parseFormattedNumber(this.value);
+        value = value.replace(/[^0-9]/g, '');
+        amountHidden.value = value;
+        this.value = value ? formatNumber(value) : '';
+    });
+    
+    // Format on blur
+    amountDisplay.addEventListener('blur', function() {
+        if (this.value) {
+            this.value = formatNumber(parseFormattedNumber(this.value));
+        }
+    });
+</script>
+@endpush
 @endsection

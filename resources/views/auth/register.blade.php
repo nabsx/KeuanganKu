@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @section('title', 'Daftar')
 @section('content')
-<div class="min-h-screen flex items-center justify-center px-4">
-    <div class="w-full max-w-md">
+<div class="min-h-screen flex flex-col justify-between px-4 py-8">
+    <div></div>
+    <div class="w-full max-w-md mx-auto">
         <!-- Header -->
         <div class="text-center mb-8">
             <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-glass-light border border-accent border-opacity-30 mb-4">
@@ -93,6 +94,11 @@
         <div class="mt-6 text-center text-xs text-text-tertiary">
             <p>Bergabunglah dengan ribuan pengguna yang mengelola keuangan dengan lebih baik</p>
         </div>
+    </div>
+    
+    <!-- Footer Copyright -->
+    <div class="text-center text-xs text-text-tertiary py-4">
+        &copy; {{ date('Y') }} KeuanganKu — Catat Pendapatan &amp; Manajemen Wallet
     </div>
 </div>
 @endsection

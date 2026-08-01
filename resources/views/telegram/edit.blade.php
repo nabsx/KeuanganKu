@@ -57,14 +57,6 @@
                 <button type="submit" class="flex-1 bg-accent hover:bg-accent-dark text-white font-semibold py-3 rounded-lg transition">
                     Simpan Pengaturan
                 </button>
-                @if (($setting->chat_id ?? null))
-                    <form method="POST" action="{{ route('telegram.test') }}" class="flex-1">
-                        @csrf
-                        <button type="submit" class="w-full px-4 py-3 bg-glass hover:bg-glass-light border border-accent border-opacity-30 text-accent font-semibold rounded-lg transition">
-                            Kirim Uji Coba
-                        </button>
-                    </form>
-                @endif
             </div>
 
             @if ($errors->any())
@@ -78,6 +70,16 @@
                 </div>
             @endif
         </form>
+
+        <!-- Test Button (Outside Form) -->
+        @if (($setting->chat_id ?? null))
+            <form method="POST" action="{{ route('telegram.test') }}" class="mt-4">
+                @csrf
+                <button type="submit" class="w-full px-4 py-3 bg-glass hover:bg-glass-light border border-accent border-opacity-30 text-accent font-semibold rounded-lg transition">
+                    Kirim Pesan Uji Coba
+                </button>
+            </form>
+        @endif
     </div>
 
     <!-- Help & Instructions -->
