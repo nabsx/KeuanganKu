@@ -2,6 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Income;
+use App\Models\WalletTransaction;
+use App\Observers\IncomeObserver;
+use App\Observers\WalletTransactionObserver;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Register model observers untuk auto-extract month/year
+        Income::observe(IncomeObserver::class);
+        WalletTransaction::observe(WalletTransactionObserver::class);
     }
 }

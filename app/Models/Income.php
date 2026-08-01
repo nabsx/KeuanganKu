@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -17,6 +18,8 @@ class Income extends Model
         'amount',
         'source',
         'note',
+        'month',
+        'year',
     ];
 
     protected $casts = [
@@ -35,5 +38,22 @@ class Income extends Model
     public function walletTransactions(): HasMany
     {
         return $this->hasMany(WalletTransaction::class);
+    }
+
+    /**
+     * Scope: Filter income untuk bulan aktif saat ini.
+     */
+    public function scopeCurrentMonth(Builder $query): Builder
+    {
+        $now = now();
+        return $query->where('month', $now->month)->where('year', $now->year);
+    }
+
+    /**
+     * Scope: Filter income untuk bulan/tahun tertentu.
+     */
+    public function scopeByMonth(Builder $query, int $month, int $year): Builder
+    {
+        return $query->where('month', $month)->where('year', $year);
     }
 }

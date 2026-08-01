@@ -32,40 +32,42 @@ class ManualTransactionController extends Controller
         $user = Auth::user();
         $newBalance = null;
 
-        DB::transaction(function () use ($validated, $wallet, &$newBalance) {
-            // Validasi: jangan biarkan balance menjadi negatif
-            if ($wallet->balance < $validated['amount']) {
-                throw new \Exception('Saldo wallet tidak cukup.');
-            }
+        try {
+            DB::transaction(function () use ($validated, $wallet, &$newBalance) {
+                // Update saldo wallet (kurangi)
+                $newBalance = $wallet->balance - $validated['amount'];
+                $wallet->update(['balance' => $newBalance]);
 
-            // Update saldo wallet (kurangi)
-            $newBalance = $wallet->balance - $validated['amount'];
-            $wallet->update(['balance' => $newBalance]);
+                // Buat transaksi manual (type='out')
+                WalletTransaction::create([
+                    'wallet_id' => $wallet->id,
+                    'user_id' => Auth::id(),
+                    'type' => 'out',
+                    'amount' => $validated['amount'],
+                    'balance_after' => $newBalance,
+                    'source' => 'manual',
+                    'description' => $validated['description'],
+                    'transaction_date' => $validated['transaction_date'],
+                ]);
+            });
 
-            // Buat transaksi manual (type='out')
-            WalletTransaction::create([
-                'wallet_id' => $wallet->id,
-                'user_id' => Auth::id(),
-                'type' => 'out',
-                'amount' => $validated['amount'],
-                'balance_after' => $newBalance,
-                'source' => 'manual',
-                'description' => $validated['description'],
-                'transaction_date' => $validated['transaction_date'],
-            ]);
-        });
+            // Kirim notifikasi Telegram
+            $this->telegram->notifyUser(
+                $user,
+                "❌ Pengeluaran dari wallet <b>{$wallet->name}</b> berhasil dicatat!\n"
+                . "Keterangan: {$validated['description']}\n"
+                . "Nominal: Rp " . number_format($validated['amount'], 0, ',', '.') . "\n"
+                . "Saldo sekarang: Rp " . number_format($newBalance, 0, ',', '.')
+            );
 
-        // Kirim notifikasi Telegram
-        $this->telegram->notifyUser(
-            $user,
-            "❌ Pengeluaran dari wallet <b>{$wallet->name}</b> berhasil dicatat!\n"
-            . "Keterangan: {$validated['description']}\n"
-            . "Nominal: Rp " . number_format($validated['amount'], 0, ',', '.') . "\n"
-            . "Saldo sekarang: Rp " . number_format($newBalance, 0, ',', '.')
-        );
-
-        return redirect()
-            ->route('wallets.show', $wallet)
-            ->with('success', "Transaksi keluar sebesar Rp " . number_format($validated['amount'], 0, ',', '.') . " berhasil dicatat.");
+            return redirect()
+                ->route('wallets.show', $wallet)
+                ->with('success', "Transaksi keluar sebesar Rp " . number_format($validated['amount'], 0, ',', '.') . " berhasil dicatat.");
+        } catch (\Exception $e) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', $e->getMessage() ?: 'Terjadi kesalahan saat memproses transaksi.');
+        }
     }
 }

@@ -33,12 +33,14 @@
                 <div class="flex items-center gap-2">
                     <span class="text-text-secondary text-sm font-medium">Rp</span>
                     <input type="text" id="amountDisplay" placeholder="Contoh: 100.000" required 
-                        class="flex-1 px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition @error('amount') border-error @enderror">
+                        class="flex-1 px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition @error('amount') border-error @enderror"
+                        data-max-amount="{{ $wallet->balance }}">
                     <input type="hidden" id="amount" name="amount" value="{{ old('amount') }}">
                 </div>
                 @error('amount')
                     <p class="text-error text-xs mt-1">{{ $message }}</p>
                 @enderror
+                <p class="text-text-tertiary text-xs mt-2">Maksimal: Rp {{ number_format($wallet->balance, 0, ',', '.') }}</p>
             </div>
 
             <!-- Description Field -->
@@ -88,6 +90,7 @@
 <script>
     const amountDisplay = document.getElementById('amountDisplay');
     const amountHidden = document.getElementById('amount');
+    const maxAmount = parseFloat(amountDisplay.dataset.maxAmount);
     
     // Format number with dots as thousands separator
     function formatNumber(num) {
@@ -108,6 +111,12 @@
     amountDisplay.addEventListener('input', function() {
         let value = parseFormattedNumber(this.value);
         value = value.replace(/[^0-9]/g, '');
+        
+        // Enforce max amount limit
+        if (value && parseFloat(value) > maxAmount) {
+            value = Math.floor(maxAmount).toString();
+        }
+        
         amountHidden.value = value;
         this.value = value ? formatNumber(value) : '';
     });
@@ -116,6 +125,18 @@
     amountDisplay.addEventListener('blur', function() {
         if (this.value) {
             this.value = formatNumber(parseFormattedNumber(this.value));
+        }
+    });
+    
+    // Validate on form submit
+    document.querySelector('form').addEventListener('submit', function(e) {
+        const amount = parseFloat(amountHidden.value);
+        if (amount > maxAmount) {
+            e.preventDefault();
+            alert('Jumlah pengeluaran tidak boleh melebihi saldo wallet (Rp ' + formatNumber(Math.floor(maxAmount)) + ')');
+            amountHidden.value = '';
+            amountDisplay.value = '';
+            amountDisplay.focus();
         }
     });
 </script>
