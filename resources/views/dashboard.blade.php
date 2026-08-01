@@ -1,71 +1,125 @@
 @extends('layouts.app')
 @section('title', 'Dashboard')
 @section('content')
-<h1 class="text-2xl font-bold mb-6">Dashboard</h1>
+<!-- Page Header -->
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-text-primary mb-2">Dashboard</h1>
+    <p class="text-text-secondary">Pantau keuangan dan wallet Anda sekilas</p>
+</div>
 
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-    <div class="bg-white rounded-2xl shadow-sm border p-5">
-        <p class="text-sm text-gray-500 mb-1">Total Pendapatan</p>
-        <p class="text-2xl font-bold text-primary-700">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
+<!-- Stats Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <!-- Total Income Card -->
+    <div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-glass-light border border-accent border-opacity-30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-text-tertiary text-sm mb-1">Total Pendapatan</p>
+        <p class="text-2xl md:text-3xl font-bold text-text-primary">Rp {{ number_format($totalPendapatan, 0, ',', '.') }}</p>
     </div>
-    <div class="bg-white rounded-2xl shadow-sm border p-5">
-        <p class="text-sm text-gray-500 mb-1">Total Saldo Semua Wallet</p>
-        <p class="text-2xl font-bold text-green-700">Rp {{ number_format($totalSaldo, 0, ',', '.') }}</p>
+
+    <!-- Total Balance Card -->
+    <div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-glass-light border border-success border-opacity-30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-text-tertiary text-sm mb-1">Total Saldo Wallet</p>
+        <p class="text-2xl md:text-3xl font-bold text-text-primary">Rp {{ number_format($totalSaldo, 0, ',', '.') }}</p>
     </div>
-    <div class="bg-white rounded-2xl shadow-sm border p-5">
-        <p class="text-sm text-gray-500 mb-1">Total Persentase Wallet</p>
-        <p class="text-2xl font-bold {{ $totalPersentase == 100 ? 'text-green-700' : 'text-red-600' }}">{{ number_format($totalPersentase, 2) }}%</p>
+
+    <!-- Allocation Progress Card -->
+    <div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg {{ $totalPersentase == 100 ? 'bg-glass-light border border-success border-opacity-30' : 'bg-glass-light border border-warning border-opacity-30' }} flex items-center justify-center">
+                <svg class="w-5 h-5 {{ $totalPersentase == 100 ? 'text-success' : 'text-warning' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-text-tertiary text-sm mb-1">Persentase Alokasi</p>
+        <p class="text-2xl md:text-3xl font-bold {{ $totalPersentase == 100 ? 'text-success' : 'text-warning' }}">{{ number_format($totalPersentase, 2) }}%</p>
         @if ($totalPersentase != 100)
-            <a href="{{ route('allocations.edit') }}" class="text-xs text-red-500 mt-1 inline-block hover:underline">Belum 100%, atur sekarang &rarr;</a>
+            <a href="{{ route('allocations.edit') }}" class="inline-block mt-2 text-xs text-warning hover:text-warning font-medium transition">Sesuaikan alokasi &rarr;</a>
         @endif
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-    <div class="bg-white rounded-2xl shadow-sm border p-5">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="font-semibold">Daftar Wallet</h2>
-            <a href="{{ route('wallets.index') }}" class="text-sm text-primary-600 hover:underline">Lihat semua</a>
+<!-- Main Content Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+    <!-- Wallets Overview -->
+    <div class="lg:col-span-2 bg-surface-secondary border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h2 class="text-lg font-semibold text-text-primary">Daftar Wallet</h2>
+                <p class="text-text-tertiary text-sm mt-1">Lihat saldo dan persentase alokasi</p>
+            </div>
+            <a href="{{ route('wallets.index') }}" class="text-accent hover:text-accent-light text-sm font-medium transition">Lihat semua →</a>
         </div>
+
         @forelse ($wallets as $wallet)
-            <div class="mb-3">
-                <div class="flex justify-between text-sm mb-1">
-                    <span class="font-medium">{{ $wallet->name }}</span>
-                    <span class="text-gray-500">Rp {{ number_format($wallet->balance, 0, ',', '.') }} &middot; {{ number_format($wallet->allocation->percentage ?? 0, 0) }}%</span>
+            <div class="mb-4 p-4 rounded-lg bg-glass border border-border-light hover:border-accent hover:border-opacity-30 transition">
+                <div class="flex justify-between items-start mb-3">
+                    <div>
+                        <h3 class="font-medium text-text-primary">{{ $wallet->name }}</h3>
+                        <p class="text-text-tertiary text-sm">Rp {{ number_format($wallet->balance, 0, ',', '.') }}</p>
+                    </div>
+                    <span class="text-xs bg-glass-light border border-accent border-opacity-30 text-accent px-2.5 py-1 rounded-full font-medium">{{ number_format($wallet->allocation->percentage ?? 0, 0) }}%</span>
                 </div>
-                <div class="w-full bg-gray-100 rounded-full h-2">
-                    <div class="bg-primary-500 h-2 rounded-full" style="width: {{ min(100, (float) ($wallet->allocation->percentage ?? 0)) }}%"></div>
+                <div class="w-full bg-glass rounded-full h-2 overflow-hidden">
+                    <div class="bg-accent h-2 rounded-full transition-all duration-500" style="width: {{ min(100, (float) ($wallet->allocation->percentage ?? 0)) }}%"></div>
                 </div>
             </div>
         @empty
-            <p class="text-sm text-gray-400">Belum ada wallet. <a href="{{ route('wallets.create') }}" class="text-primary-600 hover:underline">Tambah wallet</a></p>
+            <div class="text-center py-8">
+                <p class="text-text-tertiary mb-3">Belum ada wallet</p>
+                <a href="{{ route('wallets.create') }}" class="inline-block text-accent hover:text-accent-light font-medium transition">Tambah wallet pertama →</a>
+            </div>
         @endforelse
     </div>
 
-    <div class="bg-white rounded-2xl shadow-sm border p-5">
-        <h2 class="font-semibold mb-4">Distribusi Saldo Wallet</h2>
+    <!-- Distribution Chart -->
+    <div class="bg-surface-secondary border border-border-light rounded-2xl p-6 shadow-glass">
+        <h2 class="text-lg font-semibold text-text-primary mb-1">Distribusi Saldo</h2>
+        <p class="text-text-tertiary text-sm mb-4">Perbandingan antar wallet</p>
         @if ($wallets->count() > 0 && $totalSaldo > 0)
-            <canvas id="walletChart" height="200"></canvas>
+            <canvas id="walletChart" height="180"></canvas>
         @else
-            <p class="text-sm text-gray-400">Belum ada data saldo untuk ditampilkan.</p>
+            <div class="flex items-center justify-center h-40">
+                <p class="text-text-tertiary text-sm">Belum ada data</p>
+            </div>
         @endif
     </div>
 </div>
 
-<div class="bg-white rounded-2xl shadow-sm border p-5 mt-6">
-    <h2 class="font-semibold mb-4">Aktivitas Terbaru</h2>
+<!-- Recent Activity -->
+<div class="bg-surface-secondary border border-border-light rounded-2xl p-6 shadow-glass">
+    <div class="mb-6">
+        <h2 class="text-lg font-semibold text-text-primary">Aktivitas Terbaru</h2>
+        <p class="text-text-tertiary text-sm mt-1">Transaksi terakhir di semua wallet</p>
+    </div>
+
     @forelse ($aktivitasTerbaru as $trx)
-        <div class="flex justify-between items-center text-sm py-2 border-b last:border-0">
-            <div>
-                <p class="font-medium">{{ $trx->wallet->name }}</p>
-                <p class="text-gray-400 text-xs">{{ $trx->transaction_date->format('d M Y') }} &middot; {{ $trx->description }}</p>
+        <div class="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-glass transition {{ !$loop->last ? 'border-b border-border-light' : '' }}">
+            <div class="flex-1">
+                <p class="font-medium text-text-primary">{{ $trx->wallet->name }}</p>
+                <p class="text-text-tertiary text-xs mt-0.5">{{ $trx->transaction_date->format('d M Y') }} • {{ $trx->description }}</p>
             </div>
-            <span class="font-medium {{ $trx->type === 'in' ? 'text-green-600' : 'text-red-600' }}">
-                {{ $trx->type === 'in' ? '+' : '-' }} Rp {{ number_format($trx->amount, 0, ',', '.') }}
+            <span class="font-semibold {{ $trx->type === 'in' ? 'text-success' : 'text-error' }} text-right">
+                {{ $trx->type === 'in' ? '+' : '−' }} Rp {{ number_format($trx->amount, 0, ',', '.') }}
             </span>
         </div>
     @empty
-        <p class="text-sm text-gray-400">Belum ada aktivitas.</p>
+        <div class="text-center py-8">
+            <p class="text-text-tertiary">Belum ada aktivitas</p>
+        </div>
     @endforelse
 </div>
 
@@ -74,17 +128,31 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     const ctx = document.getElementById('walletChart');
+    const colors = ['#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16'];
     new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: @json($wallets->pluck('name')),
             datasets: [{
                 data: @json($wallets->pluck('balance')->map(fn($b) => (float) $b)),
-                backgroundColor: ['#2563eb', '#22c55e', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16'],
+                backgroundColor: colors,
+                borderColor: '#0a0a0a',
+                borderWidth: 2,
             }],
         },
         options: {
-            plugins: { legend: { position: 'bottom' } },
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+                legend: { 
+                    position: 'bottom',
+                    labels: {
+                        color: '#a0a0a0',
+                        font: { size: 12 },
+                        padding: 12,
+                    }
+                },
+            },
         },
     });
 </script>

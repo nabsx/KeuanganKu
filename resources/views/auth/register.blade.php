@@ -1,40 +1,98 @@
 @extends('layouts.app')
 @section('title', 'Daftar')
 @section('content')
-<div class="max-w-md mx-auto mt-8 bg-white rounded-2xl shadow-sm border p-8">
-    <h1 class="text-2xl font-bold text-center mb-1">Buat Akun Baru</h1>
-    <p class="text-center text-gray-500 text-sm mb-6">Mulai catat pendapatan dan atur wallet Anda</p>
+<div class="min-h-screen flex items-center justify-center px-4">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-glass-light border border-accent border-opacity-30 mb-4">
+                <svg class="w-7 h-7 text-accent" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8.5 3a1.5 1.5 0 00-1.5 1.5v5a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-5a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm-8 9a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3z"/>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold mb-2">Buat Akun Baru</h1>
+            <p class="text-text-secondary text-sm">Mulai mengelola keuangan Anda sekarang</p>
+        </div>
 
-    <form method="POST" action="{{ route('register') }}" class="space-y-4">
-        @csrf
-        <div>
-            <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
-            <input type="text" name="name" value="{{ old('name') }}" required autofocus
-                class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-2 border">
-        </div>
-        <div>
-            <label class="block text-sm font-medium mb-1">Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" required
-                class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-2 border">
-        </div>
-        <div>
-            <label class="block text-sm font-medium mb-1">Password</label>
-            <input type="password" name="password" required
-                class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-2 border">
-            <p class="text-xs text-gray-400 mt-1">Minimal 8 karakter, kombinasi huruf dan angka.</p>
-        </div>
-        <div>
-            <label class="block text-sm font-medium mb-1">Konfirmasi Password</label>
-            <input type="password" name="password_confirmation" required
-                class="w-full rounded-lg border-gray-300 focus:border-primary-500 focus:ring-primary-500 px-3 py-2 border">
-        </div>
-        <button class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium py-2.5 rounded-lg transition">
-            Daftar
-        </button>
-    </form>
+        <!-- Form Container -->
+        <div class="bg-surface-secondary border border-border-light rounded-2xl p-8 shadow-glass">
+            <form method="POST" action="{{ route('register') }}" class="space-y-5">
+                @csrf
 
-    <p class="text-center text-sm text-gray-500 mt-6">
-        Sudah punya akun? <a href="{{ route('login') }}" class="text-primary-600 font-medium hover:underline">Masuk di sini</a>
-    </p>
+                <!-- Name Field -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-text-primary mb-2">Nama Lengkap</label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus
+                        class="w-full px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition"
+                        placeholder="Nama Anda">
+                    @error('name')
+                        <p class="mt-1 text-xs text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Email Field -->
+                <div>
+                    <label for="email" class="block text-sm font-medium text-text-primary mb-2">Email</label>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required
+                        class="w-full px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition"
+                        placeholder="nama@contoh.com">
+                    @error('email')
+                        <p class="mt-1 text-xs text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-text-primary mb-2">Password</label>
+                    <input type="password" id="password" name="password" required
+                        class="w-full px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition"
+                        placeholder="••••••••">
+                    <p class="text-xs text-text-tertiary mt-1.5">Minimal 8 karakter, gunakan kombinasi huruf dan angka</p>
+                    @error('password')
+                        <p class="mt-1 text-xs text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Confirm Password Field -->
+                <div>
+                    <label for="password_confirmation" class="block text-sm font-medium text-text-primary mb-2">Konfirmasi Password</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required
+                        class="w-full px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition"
+                        placeholder="••••••••">
+                    @error('password_confirmation')
+                        <p class="mt-1 text-xs text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="w-full bg-accent hover:bg-accent-dark text-white font-semibold py-3 rounded-lg transition duration-200 mt-6">
+                    Buat Akun
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div class="relative my-6">
+                <div class="absolute inset-0 flex items-center">
+                    <div class="w-full border-t border-border-light"></div>
+                </div>
+                <div class="relative flex justify-center text-sm">
+                    <span class="px-2 bg-surface-secondary text-text-tertiary">atau</span>
+                </div>
+            </div>
+
+            <!-- Login Link -->
+            <p class="text-center text-sm text-text-secondary">
+                Sudah punya akun? 
+                <a href="{{ route('login') }}" class="text-accent font-semibold hover:text-accent-light transition">
+                    Masuk di sini
+                </a>
+            </p>
+        </div>
+
+        <!-- Footer Info -->
+        <div class="mt-6 text-center text-xs text-text-tertiary">
+            <p>Bergabunglah dengan ribuan pengguna yang mengelola keuangan dengan lebih baik</p>
+        </div>
+    </div>
 </div>
 @endsection

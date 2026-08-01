@@ -1,102 +1,86 @@
 @extends('layouts.app')
-@section('title', 'Tambah Transaksi Keluar')
+@section('title', 'Transaksi Keluar')
 @section('content')
-<div class="mb-6">
-    <a href="{{ route('wallets.show', $wallet) }}" class="text-sm text-primary-600 hover:underline">&larr; Kembali ke riwayat wallet</a>
-    <h1 class="text-2xl font-bold mt-1">Tambah Transaksi Keluar (Cicilan/Pengeluaran)</h1>
-    <p class="text-gray-500 text-sm mt-2">Wallet: <span class="font-semibold">{{ $wallet->name }}</span></p>
-</div>
-
-<div class="max-w-lg">
-    <div class="bg-white rounded-2xl shadow-sm border p-6 mb-6">
-        <div class="mb-4 pb-4 border-b">
-            <p class="text-sm text-gray-600">Saldo Saat Ini</p>
-            <p class="text-3xl font-bold text-green-700">Rp {{ number_format($wallet->balance, 0, ',', '.') }}</p>
+<div class="min-h-screen flex items-center justify-center px-4 py-8">
+    <div class="w-full max-w-md">
+        <!-- Header -->
+        <div class="mb-8">
+            <a href="{{ route('wallets.show', $wallet) }}" class="inline-flex items-center gap-1 text-accent hover:text-accent-light text-sm font-medium mb-4 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Kembali ke Wallet
+            </a>
+            <h1 class="text-2xl font-bold text-text-primary mb-1">Transaksi Keluar</h1>
+            <p class="text-text-secondary text-sm">{{ $wallet->name }}</p>
         </div>
 
-        <form action="{{ route('transactions.store', $wallet) }}" method="POST" class="space-y-5">
+        <!-- Current Balance Card -->
+        <div class="bg-surface-secondary border border-border-light rounded-2xl p-6 shadow-glass mb-6">
+            <p class="text-text-tertiary text-sm mb-2">Saldo Saat Ini</p>
+            <p class="text-3xl font-bold text-accent">Rp {{ number_format($wallet->balance, 0, ',', '.') }}</p>
+        </div>
+
+        <!-- Form -->
+        <form action="{{ route('transactions.store', $wallet) }}" method="POST" class="bg-surface-secondary border border-border-light rounded-2xl p-8 shadow-glass space-y-5">
             @csrf
 
-            {{-- Jumlah Uang --}}
+            <!-- Amount Field -->
             <div>
-                <label for="amount" class="block text-sm font-medium text-gray-700 mb-2">
-                    Jumlah Uang Keluar <span class="text-red-500">*</span>
+                <label for="amount" class="block text-sm font-medium text-text-primary mb-2">
+                    Jumlah Uang Keluar <span class="text-error">*</span>
                 </label>
-                <input
-                    type="number"
-                    id="amount"
-                    name="amount"
-                    step="0.01"
-                    min="0.01"
-                    value="{{ old('amount') }}"
-                    placeholder="0"
-                    required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('amount') border-red-500 @enderror"
-                />
+                <div class="flex items-center gap-2">
+                    <span class="text-text-secondary text-sm font-medium">Rp</span>
+                    <input type="number" id="amount" name="amount" step="0.01" min="0.01" value="{{ old('amount') }}" required 
+                        placeholder="0"
+                        class="flex-1 px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition @error('amount') border-error @enderror">
+                </div>
                 @error('amount')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-error text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Keterangan --}}
+            <!-- Description Field -->
             <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                    Keterangan <span class="text-red-500">*</span>
+                <label for="description" class="block text-sm font-medium text-text-primary mb-2">
+                    Keterangan <span class="text-error">*</span>
                 </label>
-                <textarea
-                    id="description"
-                    name="description"
-                    rows="3"
+                <textarea id="description" name="description" rows="3" required 
                     placeholder="Contoh: Bayar cicilan mobil, Biaya sekolah, dll"
-                    required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('description') border-red-500 @enderror"
-                >{{ old('description') }}</textarea>
+                    class="w-full px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition @error('description') border-error @enderror">{{ old('description') }}</textarea>
                 @error('description')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-error text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Tanggal Transaksi --}}
+            <!-- Date Field -->
             <div>
-                <label for="transaction_date" class="block text-sm font-medium text-gray-700 mb-2">
-                    Tanggal Transaksi <span class="text-red-500">*</span>
+                <label for="transaction_date" class="block text-sm font-medium text-text-primary mb-2">
+                    Tanggal Transaksi <span class="text-error">*</span>
                 </label>
-                <input
-                    type="date"
-                    id="transaction_date"
-                    name="transaction_date"
-                    value="{{ old('transaction_date', date('Y-m-d')) }}"
-                    required
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent @error('transaction_date') border-red-500 @enderror"
-                />
+                <input type="date" id="transaction_date" name="transaction_date" value="{{ old('transaction_date', date('Y-m-d')) }}" required
+                    class="w-full px-4 py-2.5 bg-glass border border-border-light rounded-lg text-text-primary focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent focus:ring-opacity-50 transition @error('transaction_date') border-error @enderror">
                 @error('transaction_date')
-                    <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+                    <p class="text-error text-xs mt-1">{{ $message }}</p>
                 @enderror
             </div>
 
-            {{-- Tombol Submit --}}
-            <div class="flex gap-3 pt-4">
-                <button
-                    type="submit"
-                    class="flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg transition"
-                >
-                    Catat Transaksi Keluar
+            <!-- Submit Buttons -->
+            <div class="flex gap-3 pt-6">
+                <button type="submit" class="flex-1 bg-error hover:bg-red-700 text-white font-semibold py-3 rounded-lg transition">
+                    Catat Transaksi
                 </button>
-                <a
-                    href="{{ route('wallets.show', $wallet) }}"
-                    class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg text-center transition"
-                >
+                <a href="{{ route('wallets.show', $wallet) }}" class="flex-1 text-center px-4 py-3 bg-glass hover:bg-glass-light border border-border-light hover:border-accent hover:border-opacity-30 text-text-secondary hover:text-accent rounded-lg font-medium transition">
                     Batal
                 </a>
             </div>
         </form>
-    </div>
 
-    {{-- Info Penting --}}
-    <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p class="text-sm text-blue-900">
-            <strong>ℹ️ Catatan:</strong> Transaksi keluar akan langsung mengurangi saldo wallet Anda. Pastikan jumlah yang Anda masukkan sudah benar.
-        </p>
+        <!-- Warning -->
+        <div class="mt-6 p-4 bg-glass border border-error border-opacity-20 rounded-lg text-error text-xs">
+            <p><span class="font-semibold">Perhatian:</span> Transaksi keluar akan langsung mengurangi saldo wallet Anda. Pastikan jumlah yang Anda masukkan sudah benar.</p>
+        </div>
     </div>
 </div>
 @endsection
