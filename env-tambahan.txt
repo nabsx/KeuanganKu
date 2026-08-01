@@ -1,0 +1,15 @@
+# ==========================================================
+# Tambahan variabel .env yang dibutuhkan aplikasi ini
+# Tempelkan baris-baris di bawah ini ke file .env project Laravel Anda
+# (variabel DB_* biasanya sudah ada dari bawaan Laravel, sesuaikan saja)
+# ==========================================================
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=catat_pendapatan
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Token bot Telegram, didapat dari @BotFather setelah /newbot
+TELEGRAM_BOT_TOKEN=
