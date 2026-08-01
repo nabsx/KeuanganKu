@@ -13,8 +13,21 @@ class StoreManualTransactionRequest extends FormRequest
 
     public function rules(): array
     {
+        // Get wallet dari route parameter
+        $wallet = $this->route('wallet');
+
         return [
-            'amount' => ['required', 'numeric', 'min:0.01', 'max:999999999.99'],
+            'amount' => [
+                'required',
+                'numeric',
+                'min:0.01',
+                'max:999999999.99',
+                function ($attribute, $value, $fail) use ($wallet) {
+                    if ($value > $wallet->balance) {
+                        $fail('Saldo wallet hanya Rp ' . number_format($wallet->balance, 0, ',', '.') . '. Jumlah pengeluaran tidak boleh melebihi saldo.');
+                    }
+                },
+            ],
             'description' => ['required', 'string', 'max:255'],
             'transaction_date' => ['required', 'date'],
         ];
