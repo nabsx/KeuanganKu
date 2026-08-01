@@ -45,6 +45,6 @@ class TelegramSettingController extends Controller
             return back()->with('success', 'Pesan uji coba berhasil dikirim ke Telegram Anda. Silakan cek chat dengan bot Anda.');
         }
 
-        return back()->with('error', 'Gagal mengirim pesan uji coba. Pastikan TELEGRAM_BOT_TOKEN di .env sudah benar, Chat ID sudah diisi, dan status Aktif dicentang.');
+        return back()->with('error', 'Gagal mengirim pesan uji coba. Pastikan TELEGRAM_BOT_TOKEN sudah benar, Chat ID sudah diisi, dan status Aktif dicentang.');
     }
 }
