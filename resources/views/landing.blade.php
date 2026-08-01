@@ -500,7 +500,7 @@
 
         <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-gray-400 text-sm">
             <p>&copy; {{ date('Y') }} KeuanganKu. Semua hak dilindungi.</p>
-            <p>Made with ❤️ untuk Indonesia</p>
+            <p>Powered By Nabsx</p>
         </div>
     </div>
 </footer>

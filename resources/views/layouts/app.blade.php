@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="bg-background">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,94 +10,180 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            50: '#eff6ff', 100: '#dbeafe', 500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
-                        },
+                        background: '#000000',
+                        surface: '#0a0a0a',
+                        'surface-secondary': '#111111',
+                        border: '#1a1a1a',
+                        'border-light': '#262626',
+                        'text-primary': '#ffffff',
+                        'text-secondary': '#a0a0a0',
+                        'text-tertiary': '#737373',
+                        accent: '#10b981',
+                        'accent-dark': '#059669',
+                        'accent-light': '#34d399',
+                        success: '#10b981',
+                        error: '#ef4444',
+                        warning: '#f59e0b',
+                        info: '#3b82f6',
+                    },
+                    boxShadow: {
+                        glass: '0 8px 32px rgba(0, 0, 0, 0.4)',
+                    },
+                    backgroundColor: {
+                        glass: 'rgba(255, 255, 255, 0.05)',
+                        'glass-light': 'rgba(255, 255, 255, 0.08)',
                     },
                 },
             },
         };
     </script>
 </head>
-<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+<body class="bg-background text-text-primary min-h-screen flex flex-col md:flex-row">
 
 @auth
-<nav class="bg-white border-b shadow-sm sticky top-0 z-10">
-    <div class="max-w-6xl mx-auto px-4">
-        <div class="flex justify-between items-center h-16">
-            <a href="{{ route('dashboard') }}" class="font-bold text-primary-700 text-lg">💰 KeuanganKu</a>
+<!-- Desktop Sidebar -->
+<aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:left-0 md:top-0 md:h-screen md:bg-surface-secondary md:border-r md:border-border-light md:z-20">
+    <div class="p-6 border-b border-border-light">
+        <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 font-bold text-lg text-accent">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                <path d="M8.5 3a1.5 1.5 0 00-1.5 1.5v5a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-5a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm-8 9a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3z"/>
+            </svg>
+            KeuanganKu
+        </a>
+    </div>
 
-            <button id="menuBtn" class="md:hidden p-2 text-gray-600" type="button">
+    <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+        <a href="{{ route('dashboard') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('dashboard') ? 'bg-glass-light text-accent border border-accent border-opacity-20' : 'text-text-secondary hover:bg-glass hover:text-text-primary' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-3m0 0l7-4 7 4M5 9v10a1 1 0 001 1h12a1 1 0 001-1V9m-9 16l9-8-9-8"/>
+            </svg>
+            Dashboard
+        </a>
+        <a href="{{ route('wallets.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('wallets.*') ? 'bg-glass-light text-accent border border-accent border-opacity-20' : 'text-text-secondary hover:bg-glass hover:text-text-primary' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Wallet
+        </a>
+        <a href="{{ route('incomes.index') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('incomes.*') ? 'bg-glass-light text-accent border border-accent border-opacity-20' : 'text-text-secondary hover:bg-glass hover:text-text-primary' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Pendapatan
+        </a>
+        <a href="{{ route('allocations.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('allocations.*') ? 'bg-glass-light text-accent border border-accent border-opacity-20' : 'text-text-secondary hover:bg-glass hover:text-text-primary' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+            Persentase
+        </a>
+        <a href="{{ route('telegram.edit') }}" class="flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('telegram.*') ? 'bg-glass-light text-accent border border-accent border-opacity-20' : 'text-text-secondary hover:bg-glass hover:text-text-primary' }}">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+            </svg>
+            Telegram
+        </a>
+    </nav>
+
+    <div class="p-4 border-t border-border-light">
+        <div class="mb-4 px-4 py-3 bg-glass rounded-lg border border-border-light">
+            <p class="text-xs text-text-tertiary mb-1">Masuk sebagai</p>
+            <p class="text-sm font-medium text-text-primary">{{ auth()->user()->name }}</p>
+        </div>
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium text-error hover:bg-glass transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Keluar
+            </button>
+        </form>
+    </div>
+</aside>
+
+<!-- Mobile Navbar + Main Content Wrapper -->
+<div class="flex-1 md:ml-64 w-full flex flex-col">
+    <!-- Mobile Header -->
+    <header class="md:hidden bg-surface-secondary border-b border-border-light sticky top-0 z-10">
+        <div class="flex justify-between items-center h-16 px-4">
+            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 font-bold text-accent">
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M8.5 3a1.5 1.5 0 00-1.5 1.5v5a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-5a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm-8 9a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3z"/>
+                </svg>
+                KeuanganKu
+            </a>
+            <button id="mobileMenuBtn" class="p-2 text-text-secondary hover:text-text-primary transition" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                 </svg>
             </button>
+        </div>
 
-            <div class="hidden md:flex items-center gap-1">
-                <a href="{{ route('dashboard') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('dashboard') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100' }}">Dashboard</a>
-                <a href="{{ route('wallets.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('wallets.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100' }}">Wallet</a>
-                <a href="{{ route('incomes.index') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('incomes.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100' }}">Pendapatan</a>
-                <a href="{{ route('allocations.edit') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('allocations.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100' }}">Persentase</a>
-                <a href="{{ route('telegram.edit') }}" class="px-3 py-2 rounded-lg text-sm font-medium {{ request()->routeIs('telegram.*') ? 'bg-primary-50 text-primary-700' : 'text-gray-600 hover:bg-gray-100' }}">Telegram</a>
-                <span class="mx-2 text-gray-300">|</span>
-                <span class="text-sm text-gray-500">Hai, {{ auth()->user()->name }}</span>
+        <!-- Mobile Menu Drawer -->
+        <nav id="mobileMenu" class="hidden px-4 pb-4 space-y-1 bg-surface border-t border-border-light">
+            <a href="{{ route('dashboard') }}" class="block px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('dashboard') ? 'bg-glass-light text-accent' : 'text-text-secondary hover:bg-glass' }}">Dashboard</a>
+            <a href="{{ route('wallets.index') }}" class="block px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('wallets.*') ? 'bg-glass-light text-accent' : 'text-text-secondary hover:bg-glass' }}">Wallet</a>
+            <a href="{{ route('incomes.index') }}" class="block px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('incomes.*') ? 'bg-glass-light text-accent' : 'text-text-secondary hover:bg-glass' }}">Pendapatan</a>
+            <a href="{{ route('allocations.edit') }}" class="block px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('allocations.*') ? 'bg-glass-light text-accent' : 'text-text-secondary hover:bg-glass' }}">Persentase</a>
+            <a href="{{ route('telegram.edit') }}" class="block px-4 py-3 rounded-lg text-sm font-medium transition {{ request()->routeIs('telegram.*') ? 'bg-glass-light text-accent' : 'text-text-secondary hover:bg-glass' }}">Telegram</a>
+            <div class="my-4 border-t border-border-light pt-4">
+                <p class="text-xs text-text-tertiary px-4 mb-2">Masuk sebagai</p>
+                <p class="text-sm font-medium text-text-primary px-4 mb-3">{{ auth()->user()->name }}</p>
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button class="px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50">Keluar</button>
+                    <button class="w-full text-left px-4 py-3 rounded-lg text-sm font-medium text-error hover:bg-glass transition">Keluar</button>
                 </form>
             </div>
-        </div>
-
-        <div id="mobileMenu" class="hidden md:hidden pb-3 space-y-1">
-            <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Dashboard</a>
-            <a href="{{ route('wallets.index') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Wallet</a>
-            <a href="{{ route('incomes.index') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Pendapatan</a>
-            <a href="{{ route('allocations.edit') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Persentase</a>
-            <a href="{{ route('telegram.edit') }}" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100">Telegram</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50">Keluar ({{ auth()->user()->name }})</button>
-            </form>
-        </div>
-    </div>
-</nav>
+        </nav>
+    </header>
 @endauth
 
-<main class="flex-1 max-w-6xl w-full mx-auto px-4 py-6">
-    @if (session('success'))
-        <div class="mb-4 rounded-lg bg-green-50 border border-green-200 text-green-800 px-4 py-3 text-sm">
-            {{ session('success') }}
-        </div>
-    @endif
+    <!-- Main Content Area -->
+    <main class="flex-1 px-4 md:px-8 py-6 md:py-8 overflow-y-auto">
+        <!-- Alert Messages -->
+        @if (session('success'))
+            <div class="mb-4 rounded-lg bg-glass-light border border-accent border-opacity-20 text-success px-4 py-3 text-sm">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    @if (session('error'))
-        <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-800 px-4 py-3 text-sm">
-            {{ session('error') }}
-        </div>
-    @endif
+        @if (session('error'))
+            <div class="mb-4 rounded-lg bg-glass-light border border-error border-opacity-20 text-error px-4 py-3 text-sm">
+                {{ session('error') }}
+            </div>
+        @endif
 
-    @if ($errors->any())
-        <div class="mb-4 rounded-lg bg-red-50 border border-red-200 text-red-800 px-4 py-3 text-sm">
-            <p class="font-medium mb-1">Terjadi kesalahan:</p>
-            <ul class="list-disc list-inside space-y-0.5">
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        @if ($errors->any())
+            <div class="mb-4 rounded-lg bg-glass-light border border-error border-opacity-20 text-error px-4 py-3 text-sm">
+                <p class="font-medium mb-1">Terjadi kesalahan:</p>
+                <ul class="list-disc list-inside space-y-0.5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
-    @yield('content')
-</main>
+        @yield('content')
+    </main>
 
-<footer class="text-center text-xs text-gray-400 py-4">
-    &copy; {{ date('Y') }} KeuanganKu — Catat Pendapatan &amp; Manajemen Wallet
-</footer>
+@auth
+</div>
+@endauth
+
+
 
 <script>
-    document.getElementById('menuBtn')?.addEventListener('click', function () {
-        document.getElementById('mobileMenu').classList.toggle('hidden');
-    });
+    const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    
+    if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', function () {
+            mobileMenu.classList.toggle('hidden');
+        });
+    }
 </script>
 @stack('scripts')
 </body>

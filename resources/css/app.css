@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
@@ -6,6 +6,35 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: "Instrument Sans", ui-sans-serif, system-ui, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+        "Noto Color Emoji";
+
+    /* Dark Theme Colors */
+    --color-background: #000000;
+    --color-surface: #0a0a0a;
+    --color-surface-secondary: #111111;
+    --color-border: #1a1a1a;
+    --color-border-light: #262626;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #a0a0a0;
+    --color-text-tertiary: #737373;
+
+    /* Accent Colors */
+    --color-accent: #10b981;
+    --color-accent-dark: #059669;
+    --color-accent-light: #34d399;
+
+    /* Status Colors */
+    --color-success: #10b981;
+    --color-error: #ef4444;
+    --color-warning: #f59e0b;
+    --color-info: #3b82f6;
+
+    /* Glass Effect */
+    --color-glass: rgba(255, 255, 255, 0.05);
+    --color-glass-light: rgba(255, 255, 255, 0.08);
+
+    /* Shadow for glass effect */
+    --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
