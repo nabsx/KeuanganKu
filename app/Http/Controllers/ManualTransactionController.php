@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreManualTransactionRequest;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
+use App\Services\TelegramService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -12,6 +13,10 @@ use Illuminate\View\View;
 
 class ManualTransactionController extends Controller
 {
+    public function __construct(private TelegramService $telegram)
+    {
+    }
+
     public function create(Wallet $wallet): View
     {
         $this->authorize('view', $wallet);
@@ -24,8 +29,10 @@ class ManualTransactionController extends Controller
         $this->authorize('update', $wallet);
 
         $validated = $request->validated();
+        $user = Auth::user();
+        $newBalance = null;
 
-        DB::transaction(function () use ($validated, $wallet) {
+        DB::transaction(function () use ($validated, $wallet, &$newBalance) {
             // Validasi: jangan biarkan balance menjadi negatif
             if ($wallet->balance < $validated['amount']) {
                 throw new \Exception('Saldo wallet tidak cukup.');
@@ -47,6 +54,15 @@ class ManualTransactionController extends Controller
                 'transaction_date' => $validated['transaction_date'],
             ]);
         });
+
+        // Kirim notifikasi Telegram
+        $this->telegram->notifyUser(
+            $user,
+            "❌ Pengeluaran dari wallet <b>{$wallet->name}</b> berhasil dicatat!\n"
+            . "Keterangan: {$validated['description']}\n"
+            . "Nominal: Rp " . number_format($validated['amount'], 0, ',', '.') . "\n"
+            . "Saldo sekarang: Rp " . number_format($newBalance, 0, ',', '.')
+        );
 
         return redirect()
             ->route('wallets.show', $wallet)
