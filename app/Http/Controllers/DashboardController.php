@@ -15,8 +15,8 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         // Get month/year dari request atau gunakan bulan aktif saat ini
-        $selectedMonth = request('month', now()->month);
-        $selectedYear = request('year', now()->year);
+        $selectedMonth = (int) request('month', now()->month);
+        $selectedYear = (int) request('year', now()->year);
         $currentMonth = now()->month;
         $currentYear = now()->year;
 
