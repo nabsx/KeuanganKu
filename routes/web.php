@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\ManualTransactionController;
 use App\Http\Controllers\TelegramSettingController;
 use App\Http\Controllers\WalletAllocationController;
 use App\Http\Controllers\WalletController;
@@ -34,6 +35,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('wallets', WalletController::class)->except(['show']);
     Route::get('/wallets/{wallet}', [WalletController::class, 'show'])->name('wallets.show');
+    Route::get('/wallets/{wallet}/transaksi-keluar', [ManualTransactionController::class, 'create'])->name('transactions.create');
+    Route::post('/wallets/{wallet}/transaksi-keluar', [ManualTransactionController::class, 'store'])->name('transactions.store');
 
     Route::get('/pendapatan', [IncomeController::class, 'index'])->name('incomes.index');
     Route::get('/pendapatan/tambah', [IncomeController::class, 'create'])->name('incomes.create');
