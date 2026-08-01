@@ -14,11 +14,13 @@ use Illuminate\Support\Facades\Log;
 class TelegramService
 {
     /**
-     * Kirim pesan mentah ke sebuah chat_id tertentu.
+     * Kirim pesan mentah ke sebuah chat_id tertentu dengan bot token yang spesifik.
+     * Jika bot_token null, menggunakan default dari config.
      */
-    public function send(?string $chatId, string $message): bool
+    public function send(?string $chatId, string $message, ?string $botToken = null): bool
     {
-        $token = config('telegram.bot_token');
+        // Gunakan bot token yang diberikan, jika tidak ada gunakan dari config
+        $token = $botToken ?: config('telegram.bot_token');
 
         if (blank($chatId) || blank($token)) {
             return false;
@@ -48,6 +50,7 @@ class TelegramService
 
     /**
      * Kirim pesan ke user tertentu berdasarkan pengaturan Telegram miliknya.
+     * Menggunakan bot_token user jika tersedia, jika tidak gunakan default dari config.
      * Tidak melakukan apa-apa (dan tidak melempar error) jika user belum
      * mengaktifkan notifikasi Telegram.
      */
@@ -59,6 +62,9 @@ class TelegramService
             return false;
         }
 
-        return $this->send($setting->chat_id, $message);
+        // Gunakan bot_token user jika ada, jika tidak gunakan default
+        $botToken = $setting->bot_token ?: config('telegram.bot_token');
+
+        return $this->send($setting->chat_id, $message, $botToken);
     }
 }

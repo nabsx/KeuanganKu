@@ -10,6 +10,7 @@ class TelegramSetting extends Model
     protected $fillable = [
         'user_id',
         'chat_id',
+        'bot_token',
         'is_active',
     ];
 

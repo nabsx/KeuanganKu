@@ -15,6 +15,7 @@ class UpdateTelegramSettingRequest extends FormRequest
     {
         return [
             'chat_id' => ['required', 'string', 'max:50'],
+            'bot_token' => ['nullable', 'string', 'max:500'],
             'is_active' => ['boolean'],
         ];
     }
@@ -24,6 +25,7 @@ class UpdateTelegramSettingRequest extends FormRequest
         return [
             'chat_id.required' => 'Chat ID Telegram wajib diisi.',
             'chat_id.max' => 'Chat ID terlalu panjang.',
+            'bot_token.max' => 'Bot token terlalu panjang.',
         ];
     }
 
