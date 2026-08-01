@@ -7,6 +7,131 @@
     <p class="text-text-secondary">Pantau keuangan dan wallet Anda sekilas</p>
 </div>
 
+<!-- Period Selector Card -->
+<div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-text-tertiary text-sm mb-1">Periode</p>
+            <h2 class="text-2xl font-bold text-text-primary">
+                {{ now()->setMonth($selectedMonth)->setYear($selectedYear)->format('F Y') }}
+            </h2>
+        </div>
+        <div class="flex gap-2">
+            @php
+                $prevMonth = $selectedMonth - 1;
+                $prevYear = $selectedYear;
+                if ($prevMonth < 1) {
+                    $prevMonth = 12;
+                    $prevYear--;
+                }
+                
+                $nextMonth = $selectedMonth + 1;
+                $nextYear = $selectedYear;
+                if ($nextMonth > 12) {
+                    $nextMonth = 1;
+                    $nextYear++;
+                }
+            @endphp
+            <a href="{{ route('dashboard', ['month' => $prevMonth, 'year' => $prevYear]) }}" 
+               class="px-4 py-2 bg-glass hover:bg-glass-light border border-border-light text-text-primary rounded-lg transition font-medium">
+                ← Sebelumnya
+            </a>
+            @if ($selectedMonth !== $currentMonth || $selectedYear !== $currentYear)
+                <a href="{{ route('dashboard') }}" 
+                   class="px-4 py-2 bg-glass hover:bg-glass-light border border-border-light text-text-primary rounded-lg transition font-medium">
+                    Bulan Ini
+                </a>
+            @endif
+            <a href="{{ route('dashboard', ['month' => $nextMonth, 'year' => $nextYear]) }}" 
+               class="px-4 py-2 bg-glass hover:bg-glass-light border border-border-light text-text-primary rounded-lg transition font-medium">
+                Selanjutnya →
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Monthly Statistics Cards -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <!-- Monthly Income Card -->
+    <div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-glass-light border border-success border-opacity-30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-text-tertiary text-sm mb-1">Pendapatan Bulan Ini</p>
+        <p class="text-2xl md:text-3xl font-bold text-text-primary">Rp {{ number_format($monthlyStats['income'], 0, ',', '.') }}</p>
+    </div>
+
+    <!-- Monthly Expenses Card -->
+    <div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-glass-light border border-error border-opacity-30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-text-tertiary text-sm mb-1">Pengeluaran Bulan Ini</p>
+        <p class="text-2xl md:text-3xl font-bold text-text-primary">Rp {{ number_format($monthlyStats['expenses'], 0, ',', '.') }}</p>
+    </div>
+
+    <!-- Monthly Savings Card -->
+    <div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass">
+        <div class="flex items-center justify-between mb-4">
+            <div class="w-10 h-10 rounded-lg bg-glass-light border border-accent border-opacity-30 flex items-center justify-center">
+                <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+        </div>
+        <p class="text-text-tertiary text-sm mb-1">Tabungan Bulan Ini</p>
+        <p class="text-2xl md:text-3xl font-bold text-text-primary">Rp {{ number_format($monthlyStats['savings'], 0, ',', '.') }}</p>
+    </div>
+</div>
+
+<!-- Target Card (if exists) -->
+@if ($monthlyTarget)
+<div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass mb-8">
+    <div class="flex items-center justify-between mb-4">
+        <div>
+            <h3 class="text-lg font-semibold text-text-primary">Target Tabungan</h3>
+            <p class="text-text-tertiary text-sm mt-1">Rp {{ number_format($monthlyTarget->target_amount, 0, ',', '.') }}</p>
+        </div>
+        <a href="{{ route('targets.edit', ['month' => $selectedMonth, 'year' => $selectedYear]) }}" 
+           class="text-accent hover:text-accent-light text-sm font-medium transition">Edit</a>
+    </div>
+    <div class="mb-3">
+        <div class="flex justify-between mb-2">
+            <p class="text-text-tertiary text-sm">Progress Pencapaian</p>
+            <p class="text-text-primary font-semibold">{{ number_format($targetProgress, 1) }}%</p>
+        </div>
+        <div class="w-full bg-glass rounded-full h-3 overflow-hidden">
+            <div class="h-3 rounded-full transition-all duration-500 {{ $targetStatus === 'success' ? 'bg-success' : ($targetStatus === 'warning' ? 'bg-warning' : 'bg-error') }}" 
+                 style="width: {{ min(100, $targetProgress) }}%"></div>
+        </div>
+    </div>
+    <p class="text-text-tertiary text-xs">
+        Rp {{ number_format($monthlyStats['savings'], 0, ',', '.') }} dari Rp {{ number_format($monthlyTarget->target_amount, 0, ',', '.') }}
+    </p>
+</div>
+@else
+<div class="bg-gradient-to-br from-glass-light to-glass border border-border-light rounded-2xl p-6 shadow-glass mb-8">
+    <div class="flex items-center justify-between">
+        <div>
+            <p class="text-text-tertiary text-sm mb-1">Target Tabungan</p>
+            <p class="text-text-primary font-medium">Belum ada target</p>
+        </div>
+        <a href="{{ route('targets.edit', ['month' => $selectedMonth, 'year' => $selectedYear]) }}" 
+           class="px-4 py-2 bg-accent hover:bg-accent-dark text-white rounded-lg transition font-medium text-sm">
+            Buat Target
+        </a>
+    </div>
+</div>
+@endif
+
 <!-- Stats Cards -->
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
     <!-- Total Income Card -->
@@ -97,6 +222,19 @@
             </div>
         @endif
     </div>
+</div>
+
+<!-- Quick Links -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+    <a href="{{ route('reports.monthly') }}" class="bg-gradient-to-br from-glass-light to-glass border border-border-light hover:border-accent hover:border-opacity-50 rounded-2xl p-6 shadow-glass transition">
+        <div class="w-10 h-10 rounded-lg bg-glass-light border border-accent border-opacity-30 flex items-center justify-center mb-3">
+            <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+        </div>
+        <h3 class="text-lg font-semibold text-text-primary mb-1">Laporan Bulanan</h3>
+        <p class="text-text-tertiary text-sm">Lihat detail transaksi dan statistik per bulan</p>
+    </a>
 </div>
 
 <!-- Recent Activity -->

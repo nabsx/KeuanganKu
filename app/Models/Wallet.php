@@ -41,4 +41,27 @@ class Wallet extends Model
     {
         return $this->hasMany(WalletTransaction::class)->latest('transaction_date')->latest('id');
     }
+
+    /**
+     * Get monthly statistics untuk wallet tertentu.
+     * Return: ['income' => ..., 'expenses' => ..., 'savings' => ...]
+     */
+    public function getMonthlyStats(int $month, int $year): array
+    {
+        $income = $this->transactions()
+            ->byMonth($month, $year)
+            ->where('type', 'in')
+            ->sum('amount');
+
+        $expenses = $this->transactions()
+            ->byMonth($month, $year)
+            ->where('type', 'out')
+            ->sum('amount');
+
+        return [
+            'income' => (float) $income,
+            'expenses' => (float) $expenses,
+            'savings' => (float) ($income - $expenses),
+        ];
+    }
 }

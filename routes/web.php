@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ManualTransactionController;
+use App\Http\Controllers\MonthlyReportController;
+use App\Http\Controllers\MonthlyTargetController;
 use App\Http\Controllers\TelegramSettingController;
 use App\Http\Controllers\WalletAllocationController;
 use App\Http\Controllers\WalletController;
@@ -54,4 +56,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/pengaturan/telegram', [TelegramSettingController::class, 'edit'])->name('telegram.edit');
     Route::put('/pengaturan/telegram', [TelegramSettingController::class, 'update'])->name('telegram.update');
     Route::post('/pengaturan/telegram/test', [TelegramSettingController::class, 'test'])->name('telegram.test');
+
+    // Monthly Reports
+    Route::get('/laporan/bulanan', [MonthlyReportController::class, 'index'])->name('reports.monthly');
+    Route::get('/laporan/bulanan/{month}/{year}', [MonthlyReportController::class, 'show'])->name('reports.monthly-detail');
+
+    // Monthly Targets
+    Route::get('/target/{month}/{year}', [MonthlyTargetController::class, 'edit'])->name('targets.edit');
+    Route::put('/target/{month}/{year}', [MonthlyTargetController::class, 'update'])->name('targets.update');
+    Route::delete('/target/{month}/{year}', [MonthlyTargetController::class, 'destroy'])->name('targets.destroy');
 });
