@@ -9,8 +9,9 @@
 
 <!-- Form -->
 <div class="max-w-2xl">
-    <form method="PUT" action="{{ route('targets.update', ['month' => $month, 'year' => $year]) }}" class="bg-surface-secondary border border-border-light rounded-2xl p-8 shadow-glass">
+    <form method="POST" action="{{ route('targets.update', ['month' => $month, 'year' => $year]) }}" class="bg-surface-secondary border border-border-light rounded-2xl p-8 shadow-glass">
         @csrf
+        @method('PUT')
 
         <!-- Target Amount Field -->
         <div class="mb-8">
