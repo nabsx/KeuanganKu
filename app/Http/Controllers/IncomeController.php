@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreIncomeRequest;
+use App\Jobs\SendTelegramNotification;
 use App\Models\WalletAllocation;
 use App\Services\IncomeAllocationService;
-use App\Services\TelegramService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +15,9 @@ class IncomeController extends Controller
 {
     public function __construct(
         private IncomeAllocationService $allocationService,
-        private TelegramService $telegram,
     ) {
+        // TelegramService tidak lagi di-inject langsung di sini,
+        // karena pengiriman notifikasi sekarang lewat Job (queue).
     }
 
     public function index(): View
@@ -46,7 +47,10 @@ class IncomeController extends Controller
         $totalPersentase = round((float) WalletAllocation::where('user_id', $user->id)->sum('percentage'), 2);
 
         if ($totalPersentase !== 100.00) {
-            $this->telegram->notifyUser($user, "⚠️ Peringatan: Total persentase wallet Anda saat ini {$totalPersentase}%, belum tepat 100%. Percobaan mencatat pendapatan ditolak.");
+            SendTelegramNotification::dispatch(
+                $user,
+                "⚠️ Peringatan: Total persentase wallet Anda saat ini {$totalPersentase}%, belum tepat 100%. Percobaan mencatat pendapatan ditolak."
+            );
 
             return back()->withInput()->with('error', "Total persentase wallet Anda saat ini {$totalPersentase}%. Total harus tepat 100% sebelum pendapatan bisa dicatat. Silakan atur di menu Persentase Wallet.");
         }
@@ -58,7 +62,7 @@ class IncomeController extends Controller
             return $income;
         });
 
-        $this->telegram->notifyUser(
+        SendTelegramNotification::dispatch(
             $user,
             "✅ Pendapatan baru berhasil dicatat!\nSumber: {$income->source}\nNominal: Rp".number_format((float) $income->amount, 0, ',', '.')
                 ."\nTanggal: {$income->date->format('d-m-Y')}"

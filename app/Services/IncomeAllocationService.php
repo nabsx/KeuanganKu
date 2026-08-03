@@ -2,29 +2,16 @@
 
 namespace App\Services;
 
+use App\Jobs\SendTelegramNotification;
 use App\Models\Income;
 use App\Models\WalletAllocation;
 use App\Models\WalletTransaction;
 use Illuminate\Support\Collection;
 
-/**
- * Logic inti pembagian nominal pendapatan ke seluruh wallet
- * berdasarkan persentase yang sudah diatur user.
- *
- * Aturan pembulatan: setiap wallet (kecuali yang terakhir) dibulatkan
- * 2 desimal dari (nominal x persentase / 100). Wallet TERAKHIR menerima
- * sisa (nominal - total yang sudah dibagi) sehingga total seluruh alokasi
- * selalu presis sama dengan nominal pendapatan, tidak lebih tidak kurang.
- */
 class IncomeAllocationService
 {
-    public function __construct(private TelegramService $telegram)
-    {
-    }
+    // Constructor kosong, TelegramService tidak lagi dipakai langsung di sini.
 
-    /**
-     * @throws \RuntimeException jika total persentase wallet user belum tepat 100%
-     */
     public function allocate(Income $income): Collection
     {
         $user = $income->user;
@@ -53,7 +40,6 @@ class IncomeAllocationService
             }
 
             if ($index === $count - 1) {
-                // Wallet terakhir menerima sisa agar total selalu presisi.
                 $portion = round($amount - $distributed, 2);
             } else {
                 $portion = round($amount * ((float) $allocation->percentage / 100), 2);
@@ -77,11 +63,13 @@ class IncomeAllocationService
 
             $transactions->push($trx);
 
-            $this->telegram->notifyUser(
+            SendTelegramNotification::dispatch(
                 $user,
                 "💰 Wallet <b>{$wallet->name}</b> menerima alokasi dana sebesar Rp".number_format($portion, 0, ',', '.')
                     ." dari pendapatan \"{$income->source}\".\nSaldo sekarang: Rp".number_format($wallet->balance, 0, ',', '.')
-            );
+            )->afterCommit();
+
+            $transactions->push($trx);
         }
 
         return $transactions;
