@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KeuanganKu - Kelola Keuanganmu Lebih Cerdas</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/keuanganku-logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -104,7 +105,7 @@
         <div class="flex justify-between items-center h-16">
             <!-- Logo -->
             <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center text-white font-bold">💰</div>
+                <img src="{{ asset('images/keuanganku-logo.png') }}" alt="KeuanganKu Logo" class="w-8 h-8 object-contain">
                 <span class="text-lg font-bold">KeuanganKu</span>
             </div>
 
