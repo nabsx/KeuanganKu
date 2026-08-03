@@ -6,10 +6,8 @@
     <div class="w-full max-w-md mx-auto">
         <!-- Header -->
         <div class="text-center mb-8">
-            <div class="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-glass-light border border-accent border-opacity-30 mb-4">
-                <svg class="w-7 h-7 text-accent" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M8.5 3a1.5 1.5 0 00-1.5 1.5v5a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-5a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm-8 9a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3z"/>
-                </svg>
+            <div class="flex justify-center mb-4">
+                <img src="{{ asset('images/keuanganku-logo.png') }}" alt="KeuanganKu Logo" class="h-16 w-16 object-contain">
             </div>
             <h1 class="text-3xl font-bold mb-2">Buat Akun Baru</h1>
             <p class="text-text-secondary text-sm">Mulai mengelola keuangan Anda sekarang</p>
