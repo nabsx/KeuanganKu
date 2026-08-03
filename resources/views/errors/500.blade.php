@@ -66,7 +66,7 @@
                 <a href="javascript:history.back()" class="px-6 py-3 bg-surface-secondary border border-border-light text-text-primary font-semibold rounded-lg hover:bg-surface transition">
                     Kembali
                 </a>
-                <a href="{{ route('landing') }}" class="px-6 py-3 bg-error text-white font-semibold rounded-lg hover:bg-error-dark transition">
+                <a href="{{ route('home') }}" class="px-6 py-3 bg-error text-white font-semibold rounded-lg hover:bg-error-dark transition">
                     Ke Landing Page
                 </a>
             </div>

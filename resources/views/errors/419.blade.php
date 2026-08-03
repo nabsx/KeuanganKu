@@ -66,7 +66,7 @@
                 <a href="{{ route('login') }}" class="px-6 py-3 bg-warning text-black font-semibold rounded-lg hover:bg-warning-dark transition">
                     Masuk Kembali
                 </a>
-                <a href="{{ route('landing') }}" class="px-6 py-3 bg-surface-secondary border border-border-light text-text-primary font-semibold rounded-lg hover:bg-surface transition">
+                <a href="{{ route('home') }}" class="px-6 py-3 bg-surface-secondary border border-border-light text-text-primary font-semibold rounded-lg hover:bg-surface transition">
                     Ke Landing Page
                 </a>
             </div>

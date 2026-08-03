@@ -63,7 +63,7 @@
 
             <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a href="{{ route('landing') }}" class="px-6 py-3 bg-accent text-black font-semibold rounded-lg hover:bg-accent-dark transition">
+                <a href="{{ route('home') }}" class="px-6 py-3 bg-accent text-black font-semibold rounded-lg hover:bg-accent-dark transition">
                     Ke Landing Page
                 </a>
                 <a href="{{ route('dashboard') }}" class="px-6 py-3 bg-surface-secondary border border-border-light text-text-primary font-semibold rounded-lg hover:bg-surface transition">
