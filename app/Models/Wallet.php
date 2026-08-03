@@ -42,12 +42,17 @@ class Wallet extends Model
 
     /**
      * Override Route Key Name untuk menggunakan UUID bukan ID integer
+     * Transition-safe: Gunakan uuid jika tersedia (setelah migration), jika tidak fallback ke id
      * Ini akan secara otomatis menggunakan uuid untuk implicit route model binding
      * Contoh: /wallets/{wallet} akan menggunakan UUID, bukan integer ID
      */
     public function getRouteKeyName(): string
     {
-        return 'uuid';
+        // Check apakah kolom uuid ada di database sebelum menggunakannya
+        if ($this->getConnection()->getSchemaBuilder()->hasColumn($this->getTable(), 'uuid')) {
+            return 'uuid';
+        }
+        return 'id';
     }
 
     public function user(): BelongsTo
