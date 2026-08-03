@@ -41,12 +41,6 @@ class SendTelegramNotification implements ShouldQueue
     public int $delay = 0;
 
     /**
-     * Nama queue untuk job ini.
-     * Bisa didefinisikan di sini atau saat dispatch.
-     */
-    public string $queue = 'default';
-
-    /**
      * Constructor - menerima parameter yang dibutuhkan.
      * Parameter ini akan di-serialize dan disimpan di tabel jobs.
      */
