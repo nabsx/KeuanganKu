@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Catat Pendapatan & Wallet')</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/keuanganku-logo.png') }}">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -43,12 +44,9 @@
 @auth
 <!-- Desktop Sidebar -->
 <aside class="hidden md:flex md:w-64 md:flex-col md:fixed md:left-0 md:top-0 md:h-screen md:bg-surface-secondary md:border-r md:border-border-light md:z-20">
-    <div class="p-6 border-b border-border-light">
-        <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 font-bold text-lg text-accent">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M8.5 3a1.5 1.5 0 00-1.5 1.5v5a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-5a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm-8 9a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3z"/>
-            </svg>
-            KeuanganKu
+    <div class="p-6 border-b border-border-light flex items-center justify-center">
+        <a href="{{ route('dashboard') }}" class="inline-flex items-center justify-center">
+            <img src="{{ asset('images/keuanganku-logo.png') }}" alt="KeuanganKu Logo" class="h-12 w-12 object-contain">
         </a>
     </div>
 
@@ -108,11 +106,8 @@
     <!-- Mobile Header -->
     <header class="md:hidden bg-surface-secondary border-b border-border-light sticky top-0 z-10">
         <div class="flex justify-between items-center h-16 px-4">
-            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-2 font-bold text-accent">
-                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M8.5 3a1.5 1.5 0 00-1.5 1.5v5a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-5a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm-8 9a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3zm8 0a1.5 1.5 0 00-1.5 1.5v3a1.5 1.5 0 001.5 1.5h3a1.5 1.5 0 001.5-1.5v-3a1.5 1.5 0 00-1.5-1.5h-3z"/>
-                </svg>
-                KeuanganKu
+            <a href="{{ route('dashboard') }}" class="inline-flex items-center">
+                <img src="{{ asset('images/keuanganku-logo.png') }}" alt="KeuanganKu Logo" class="h-10 w-10 object-contain">
             </a>
             <button id="mobileMenuBtn" class="p-2 text-text-secondary hover:text-text-primary transition" type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
