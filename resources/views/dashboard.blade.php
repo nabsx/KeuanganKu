@@ -247,8 +247,8 @@
     @forelse ($aktivitasTerbaru as $trx)
         <div class="flex justify-between items-center py-3 px-4 rounded-lg hover:bg-glass transition {{ !$loop->last ? 'border-b border-border-light' : '' }}">
             <div class="flex-1">
-                <p class="font-medium text-text-primary">{{ $trx->wallet->name }}</p>
-                <p class="text-text-tertiary text-xs mt-0.5">{{ $trx->transaction_date->format('d M Y') }} • {{ $trx->description }}</p>
+                <p class="font-medium text-text-primary">{{ $trx->wallet?->name ?? 'Wallet dihapus' }}</p>
+                <p class="text-text-tertiary text-xs mt-0.5">{{ $trx->transaction_date?->format('d M Y') ?? 'Tanggal tidak tersedia' }} • {{ $trx->description }}</p>
             </div>
             <span class="font-semibold {{ $trx->type === 'in' ? 'text-success' : 'text-error' }} text-right">
                 {{ $trx->type === 'in' ? '+' : '−' }} Rp {{ number_format($trx->amount, 0, ',', '.') }}
