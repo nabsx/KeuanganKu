@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DataBackupController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ManualTransactionController;
 use App\Http\Controllers\MonthlyReportController;
@@ -45,6 +46,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/wallets/{wallet}', [WalletController::class, 'show'])->name('wallets.show');
     Route::get('/wallets/{wallet}/transaksi-keluar', [ManualTransactionController::class, 'create'])->name('transactions.create');
     Route::post('/wallets/{wallet}/transaksi-keluar', [ManualTransactionController::class, 'store'])->name('transactions.store');
+    Route::get('/wallets/{wallet}/tambah-dana', [ManualTransactionController::class, 'depositCreate'])->name('deposits.create');
+    Route::post('/wallets/{wallet}/tambah-dana', [ManualTransactionController::class, 'deposit'])->name('deposits.store');
+
+    Route::get('/data-backup', [DataBackupController::class, 'index'])->name('data-backup.index');
+    Route::get('/data-backup/export', [DataBackupController::class, 'export'])->name('data-backup.export');
+    Route::post('/data-backup/import', [DataBackupController::class, 'import'])->name('data-backup.import');
+    Route::delete('/data-backup/all', [DataBackupController::class, 'destroyAll'])->name('data-backup.destroy-all');
 
     Route::get('/pendapatan', [IncomeController::class, 'index'])->name('incomes.index');
     Route::get('/pendapatan/tambah', [IncomeController::class, 'create'])->name('incomes.create');

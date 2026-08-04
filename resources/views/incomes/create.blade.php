@@ -21,7 +21,7 @@
                 <p class="text-xs mb-2">Anda perlu membuat wallet terlebih dahulu untuk mencatat pendapatan.</p>
                 <a href="{{ route('wallets.create') }}" class="inline-block text-warning hover:text-warning font-medium underline">Buat wallet sekarang</a>
             </div>
-        @elseif ($totalPersentase != 100)
+        @elseif (abs((float) $totalPersentase - 100.0) > 0.01)
             <div class="mb-6 p-4 bg-glass border border-warning border-opacity-30 rounded-lg text-warning text-sm">
                 <p class="font-medium mb-1">Persentase wallet tidak lengkap</p>
                 <p class="text-xs mb-2">Total persentase saat ini: <span class="font-mono font-bold">{{ number_format($totalPersentase, 2) }}%</span> (target: 100%)</p>
@@ -82,7 +82,7 @@
 
             <!-- Submit Buttons -->
             <div class="flex gap-3 pt-6">
-                <button type="submit" {{ ($walletCount === 0 || $totalPersentase != 100) ? 'disabled' : '' }}
+                <button type="submit" {{ ($walletCount === 0 || abs((float) $totalPersentase - 100.0) > 0.01) ? 'disabled' : '' }}
                     class="flex-1 bg-success hover:bg-green-700 disabled:bg-text-tertiary disabled:cursor-not-allowed text-white font-semibold py-3 rounded-lg transition">
                     Simpan & Bagikan
                 </button>
