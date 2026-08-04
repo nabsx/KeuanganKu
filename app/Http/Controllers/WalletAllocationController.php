@@ -31,7 +31,7 @@ class WalletAllocationController extends Controller
 
         $total = round((float) array_sum($data), 2);
 
-        if ($total !== 100.00) {
+        if (abs($total - 100.0) > 0.01) {
             $this->telegram->notifyUser($user, "⚠️ Peringatan: Percobaan mengubah persentase wallet gagal karena totalnya {$total}%, bukan 100%.");
 
             return back()->withInput()->with('error', "Total persentase harus tepat 100%. Total yang Anda masukkan: {$total}%.");

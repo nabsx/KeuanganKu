@@ -18,6 +18,7 @@ class IncomeAllocationService
 
         $allocations = WalletAllocation::with('wallet')
             ->where('user_id', $user->id)
+            ->whereHas('wallet', fn ($query) => $query->where('user_id', $user->id))
             ->orderBy('id')
             ->get();
 

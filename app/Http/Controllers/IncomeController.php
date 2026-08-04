@@ -30,7 +30,9 @@ class IncomeController extends Controller
     public function create(): View
     {
         $user = Auth::user();
-        $totalPersentase = round((float) WalletAllocation::where('user_id', $user->id)->sum('percentage'), 2);
+        $totalPersentase = round((float) WalletAllocation::where('user_id', $user->id)
+            ->whereHas('wallet', fn ($query) => $query->where('user_id', $user->id))
+            ->sum('percentage'), 2);
         $walletCount = $user->wallets()->count();
 
         return view('incomes.create', compact('totalPersentase', 'walletCount'));
@@ -44,9 +46,11 @@ class IncomeController extends Controller
             return back()->withInput()->with('error', 'Anda belum memiliki wallet. Silakan tambah wallet terlebih dahulu sebelum mencatat pendapatan.');
         }
 
-        $totalPersentase = round((float) WalletAllocation::where('user_id', $user->id)->sum('percentage'), 2);
+        $totalPersentase = round((float) WalletAllocation::where('user_id', $user->id)
+            ->whereHas('wallet', fn ($query) => $query->where('user_id', $user->id))
+            ->sum('percentage'), 2);
 
-        if ($totalPersentase !== 100.00) {
+        if (abs($totalPersentase - 100.0) > 0.01) {
             SendTelegramNotification::dispatch(
                 $user,
                 "⚠️ Peringatan: Total persentase wallet Anda saat ini {$totalPersentase}%, belum tepat 100%. Percobaan mencatat pendapatan ditolak."
