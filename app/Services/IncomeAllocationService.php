@@ -23,7 +23,7 @@ class IncomeAllocationService
 
         $totalPersentase = round((float) $allocations->sum('percentage'), 2);
 
-        if ($totalPersentase !== 100.00) {
+        if (abs($totalPersentase - 100.0) > 0.01) {
             throw new \RuntimeException("Total persentase wallet saat ini {$totalPersentase}%, harus tepat 100% agar pendapatan bisa dibagi otomatis.");
         }
 
@@ -69,7 +69,6 @@ class IncomeAllocationService
                     ." dari pendapatan \"{$income->source}\".\nSaldo sekarang: Rp".number_format($wallet->balance, 0, ',', '.')
             )->afterCommit();
 
-            $transactions->push($trx);
         }
 
         return $transactions;

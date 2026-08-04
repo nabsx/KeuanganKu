@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreManualTransactionRequest;
 use App\Http\Requests\StoreWalletDepositRequest;
+use App\Jobs\SendTelegramNotification;
+use App\Models\Income;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use App\Services\TelegramService;
@@ -36,12 +38,27 @@ class ManualTransactionController extends Controller
         $this->authorize('update', $wallet);
         $validated = $request->validated();
         $newBalance = null;
-        DB::transaction(function () use ($validated, $wallet, &$newBalance) {
-            $newBalance = $wallet->balance + $validated['amount'];
+        $user = Auth::user();
+        DB::transaction(function () use ($validated, $wallet, $user, &$newBalance) {
+            $date = \Carbon\Carbon::parse($validated['transaction_date']);
+            $newBalance = (float) $wallet->balance + (float) $validated['amount'];
             $wallet->update(['balance' => $newBalance]);
-            WalletTransaction::create(['wallet_id' => $wallet->id, 'user_id' => Auth::id(), 'type' => 'in', 'amount' => $validated['amount'], 'balance_after' => $newBalance, 'source' => 'manual', 'description' => $validated['description'], 'transaction_date' => $validated['transaction_date'], 'month' => date('n', strtotime($validated['transaction_date'])), 'year' => date('Y', strtotime($validated['transaction_date']))]);
+            Income::create([
+                'user_id' => $user->id,
+                'date' => $date,
+                'amount' => $validated['amount'],
+                'source' => 'Dana manual - '.$wallet->name,
+                'note' => $validated['description'],
+            ]);
+            WalletTransaction::create([
+                'wallet_id' => $wallet->id, 'user_id' => $user->id, 'type' => 'in',
+                'amount' => $validated['amount'], 'balance_after' => $newBalance,
+                'source' => 'manual', 'description' => $validated['description'],
+                'transaction_date' => $date, 'month' => $date->month, 'year' => $date->year,
+            ]);
+            SendTelegramNotification::dispatch($user, "💰 Dana manual berhasil ditambahkan ke wallet <b>{$wallet->name}</b>.\nNominal: Rp".number_format($validated['amount'], 0, ',', '.')."\nCatatan: {$validated['description']}\nSaldo sekarang: Rp".number_format($newBalance, 0, ',', '.'))->afterCommit();
         });
-        return redirect()->route('wallets.show', $wallet)->with('success', 'Dana berhasil ditambahkan ke wallet.');
+        return redirect()->route('wallets.show', $wallet)->with('success', 'Dana berhasil ditambahkan ke wallet dan pendapatan.');
     }
 
     public function store(StoreManualTransactionRequest $request, Wallet $wallet): RedirectResponse
