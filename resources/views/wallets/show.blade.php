@@ -18,6 +18,7 @@
     <div class="w-full md:w-auto md:text-right bg-surface-secondary border border-border-light rounded-2xl p-6 shadow-glass">
         <p class="text-text-tertiary text-sm mb-1">Saldo Saat Ini</p>
         <p class="text-3xl font-bold text-accent mb-4">Rp {{ number_format($wallet->balance, 0, ',', '.') }}</p>
+        <a href="{{ route('deposits.create', $wallet) }}" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-dark text-background text-sm font-semibold px-4 py-2 rounded-lg transition mr-2">Tambah Dana</a>
         <a href="{{ route('transactions.create', $wallet) }}" class="inline-flex items-center gap-2 bg-error hover:bg-red-700 text-white text-sm font-semibold px-4 py-2 rounded-lg transition">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
