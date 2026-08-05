@@ -118,7 +118,7 @@
             <tbody>
                 @forelse ($transactions as $trx)
                     <tr class="border-b border-border-light hover:bg-glass transition">
-                        <td class="px-6 py-4 text-text-primary font-medium">{{ $trx->wallet->name }}</td>
+                        <td class="px-6 py-4 text-text-primary font-medium">{{ $trx->wallet?->name ?? 'Wallet dihapus' }}</td>
                         <td class="px-6 py-4 text-text-secondary text-sm">{{ $trx->description ?: 'N/A' }}</td>
                         <td class="px-6 py-4 text-text-tertiary text-sm">{{ $trx->transaction_date->format('d M Y') }}</td>
                         <td class="px-6 py-4 text-right font-medium {{ $trx->type === 'in' ? 'text-success' : 'text-error' }}">
